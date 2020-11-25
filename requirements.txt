@@ -1,0 +1,13 @@
+numpy
+scipy
+numpy
+cython
+pytest==5.3.5
+requests
+flask-restplus==0.13.0
+flask_cors==3.0.8
+werkzeug==0.16.1
+flask-swagger==0.2.14
+flask~=1.0.2
+flask_basicauth
+six

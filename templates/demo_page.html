@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Example page</title>
+        <link rel="stylesheet" href="./css/css.css">
+        <script src="./js/jquery-3.4.1.min.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" type="text/css" href="./css/jquery.datetimepicker.css"/ >
+        <script src="./js/moment.min.js"></script>
+
+        <link rel="stylesheet" href="./css/jquery-ui.css">
+        <link rel="stylesheet" href="./css/jquery-ui.theme.css">
+        <script src="./js/jquery-ui.js"></script>
+    </head>
+
+    <body>
+        <h1>hi there, good looking!</h1>
+        <form id="api_access" action="javascript:void(0);">   
+
+            <input name='test' value='chicken'>
+  
+            <select name='campaign_objective'>
+                <option value='select' selected>Select the objective(s).</option>
+                <option value='engagement_rate'>Engagement rate</option>
+                <option value='click_through_rate' >Click-through rate</option>
+            </select><br>
+            <input type='button' class='submit' onclick='submit_form(this)' value='submit button'>
+        </form>
+
+    <div id='results'>
+    </div>
+
+    <script>
+        var BASE_URL = 'http://' + window.location.hostname +':8890/';
+
+        // extract all relevant form data from a form
+        function get_form_data(form_elem){
+
+            var FormData = {}
+
+            $(form_elem).find('select').each(
+                function(index){
+                    var input = $(this);
+                    if (input.attr('name')){
+                        FormData[input.attr('name')] = [input.val()];
+                    }
+                }
+            );
+
+            $(form_elem).find('input').each(
+                function(index){
+                    var input = $(this);
+                    if (input.attr('name')){
+                        FormData[input.attr('name')] = [input.val()];
+                    }
+            });  
+            return FormData;
+        }
+
+        var tt;
+        function submit_form(elem){
+            var url = BASE_URL +'api_call';
+            var form_id = $(elem.form).attr('id')
+            var data_ = get_form_data(elem.form);
+            tt = data_;
+
+            console.log(JSON.stringify(data_));
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify(data_),
+                success: function( res ) {
+                // process data
+                tt = JSON.parse(res);
+                display_results(JSON.parse(res));
+                console.log("It's a success!");
+                console.log("the variable tt holds the results of the call");
+                },
+                error: function (res) {
+                    console.log('error');
+                }
+            });
+        }
+
+        function display_results(res){
+            $('#results').html(JSON.stringify(res))
+        }
+
+    </script> 
+</body>
+</html>
